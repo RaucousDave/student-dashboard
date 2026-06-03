@@ -25,7 +25,7 @@ const itemVariants = {
     scale: 1,
     transition: {
       duration: 0.45,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -38,9 +38,9 @@ export default function DashboardGrid({ courses }: { courses: Course[] }) {
         initial="hidden"
         animate="show"
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="grid h-full w-full min-h-screen grid-cols-1 gap-3 md:grid-cols-3 md:grid-rows-[auto_minmax(0,1fr)]  md:gap-5"
+        className="grid h-full w-full min-h-screen grid-cols-1 gap-3 md:grid-cols-3 md:grid-rows-[auto_minmax(0,1fr)] md:gap-5"
       >
-        <motion.div variants={itemVariants} className="min-h-0 mb-6 sm:mb-0 md:col-span-3">
+        <motion.div variants={itemVariants} className="sm:mb-0 md:col-span-3">
           <WelcomeCard />
         </motion.div>
 
@@ -52,7 +52,7 @@ export default function DashboardGrid({ courses }: { courses: Course[] }) {
           <ChartDisplay />
         </motion.div>
       </motion.section>
-      {/* <MobileNav /> */}
+      <MobileNav />
     </>
   );
 }
