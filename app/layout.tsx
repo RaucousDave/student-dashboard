@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Sidebar from "./components/Sidebar";
 import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
+import MobileNav from "./components/MobileNav";
 import "./globals.css";
 import { LayoutProvider } from "@/lib/hooks/useLayout";
 
@@ -32,9 +33,10 @@ export default function RootLayout({
       <body className="h-full bg-background text-foreground md:flex md:overflow-hidden">
         <LayoutProvider>
           <Sidebar />
-          <main className="h-full min-h-0 min-w-0 flex-1 overflow-y-auto p-4 pb-[30rem] sm:p-5 sm:pb-28 lg:p-6 lg:pb-6">
+          <main className="h-full min-h-0 min-w-0 flex-1 overflow-y-auto p-4 pb-150 sm:p-5 sm:pb-28 lg:p-6 lg:pb-6">
             {children}
           </main>
+          <MobileNav />
         </LayoutProvider>
       </body>
     </html>

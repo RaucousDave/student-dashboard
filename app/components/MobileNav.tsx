@@ -1,3 +1,5 @@
+"use client"
+
 import { motion, LayoutGroup } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -37,7 +39,11 @@ export default function MobileNav() {
                     {active ? (
                       <motion.span
                         layoutId="mobile-nav-highlight"
-                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 30,
+                        }}
                         className="absolute inset-0 rounded-2xl border border-primary/20 bg-primary/10"
                       />
                     ) : null}

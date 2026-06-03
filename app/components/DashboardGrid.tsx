@@ -51,7 +51,6 @@ export default function DashboardGrid({ courses }: { courses: Course[] }) {
           <ChartDisplay />
         </motion.div>
       </motion.section>
-      <MobileNav />
     </>
   );
 }
