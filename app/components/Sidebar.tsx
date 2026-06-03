@@ -1,8 +1,10 @@
 "use client";
 
+import { motion, LayoutGroup } from "framer-motion";
 import { useLayout } from "@/lib/hooks/useLayout";
 import { Home, Book, Settings, LayoutPanelTop, PanelLeft } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export const navlinks = [
   { id: 1, name: "Home", icon: Home, href: "/" },
@@ -12,6 +14,12 @@ export const navlinks = [
 
 export default function Sidebar() {
   const { collapsed, toggleSidebar } = useLayout();
+  const pathname = usePathname();
+
+  const isActive = (href: string) =>
+    href === "/"
+      ? pathname === href
+      : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <aside
@@ -56,48 +64,60 @@ export default function Sidebar() {
       </div>
 
       {/* Nav */}
-      <nav className="flex flex-1 flex-col gap-1 px-2">
-        {navlinks.map((link) => (
-          <Link
-            href={link.href}
-            key={link.id}
-            className={`
-              group relative flex items-center gap-3 px-3 py-2.5 rounded-lg
-              text-sm text-muted-foreground
-              hover:bg-accent hover:text-accent-foreground
-              transition-colors duration-150
-              ${collapsed ? "justify-center" : ""}
-            `}
-          >
-            <link.icon size={18} className="shrink-0" />
-            <span
-              className={`
-                whitespace-nowrap
-                transition-all duration-200
-                ${collapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100 w-auto"}
-              `}
-            >
-              {link.name}
-            </span>
+      <LayoutGroup id="sidebar-nav">
+        <nav className="flex flex-1 flex-col gap-1 px-2">
+          {navlinks.map((link) => {
+            const active = isActive(link.href);
 
-            {/* Tooltip when collapsed */}
-            {collapsed && (
-              <span
-                className="
-                absolute left-full ml-3 px-2 py-1 rounded-md
-                bg-popover text-popover-foreground text-xs
-                border border-border
-                whitespace-nowrap pointer-events-none
-                opacity-0 group-hover:opacity-100
-                transition-opacity duration-150 z-50
-              "
+            return (
+              <Link
+                href={link.href}
+                key={link.id}
+                aria-current={active ? "page" : undefined}
+                className={`
+                  group relative flex items-center gap-3 overflow-hidden rounded-lg px-3 py-2.5
+                  text-sm transition-colors duration-150
+                  ${collapsed ? "justify-center" : ""}
+                  ${active ? "text-foreground" : "text-muted-foreground hover:text-accent-foreground"}
+                `}
               >
-                {link.name}
-              </span>
-            )}
-          </Link>
-        ))}
-      </nav>
+                {active ? (
+                  <motion.span
+                    layoutId="sidebar-highlight"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    className="absolute inset-0 rounded-lg border border-primary/20 bg-primary/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+                  />
+                ) : null}
+
+                <link.icon size={18} className="relative z-10 shrink-0" />
+                <span
+                  className={`
+                    relative z-10
+                    whitespace-nowrap
+                    transition-all duration-200
+                    ${collapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"}
+                  `}
+                >
+                  {link.name}
+                </span>
+
+                {/* Tooltip when collapsed */}
+                {collapsed && (
+                  <span
+                    className="
+                    absolute left-full ml-3 rounded-md border border-border bg-popover px-2 py-1 text-xs
+                    whitespace-nowrap pointer-events-none text-popover-foreground
+                    opacity-0 transition-opacity duration-150 group-hover:opacity-100 z-50
+                  "
+                  >
+                    {link.name}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+      </LayoutGroup>
     </aside>
   );
 }
